@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add District | Sudurpaschim Budget Visualizer</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Add District</h1>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+
+        <label>District Name</label>
+        <input type="text" name="district_name" placeholder="Enter district name" required>
+
+        <label>Population</label>
+        <input type="number" name="population" placeholder="Enter population" required>
+
+        <label>Budget Allocation (Rs.)</label>
+        <input type="number" step="0.01" name="allocation" placeholder="Enter allocation" required>
+
+        <label>Per Citizen Allocation (Rs.)</label>
+        <input type="number" step="0.01" name="per_citizen" placeholder="Enter per citizen allocation" required>
+
+        <label>Human Development Index (HDI)</label>
+        <input type="number" step="0.001" name="hdi" placeholder="Example: 0.652">
+
+        <label>Status</label>
+        <input type="text" name="status" placeholder="Priority / Standard / Developing">
+
+        <div class="buttons">
+
+            <a href="{{ url_for('districts') }}" class="back">
+                Back
+            </a>
+
+            <button type="submit">
+                Save District
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>

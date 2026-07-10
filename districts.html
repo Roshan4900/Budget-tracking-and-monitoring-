@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Districts — Sudurpaschim Province Budget Visualizer</title>
+  <meta name="description" content="District-wise budget allocation and per-citizen spending across all 9 districts.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <a class="nav-brand" href="index.html">
+      <span class="nav-title">सुदूरपश्चिम Budget</span>
+      <span class="nav-sub">Sudurpaschim Province · FY 2081/82</span>
+    </a>
+    <nav class="nav-links">
+      <a class="nav-btn" href="index.html">Home</a>
+      <a class="nav-btn" href="ministries.html">Ministries</a>
+      <a class="nav-btn active" href="districts.html">Districts</a>
+      <a class="nav-btn" href="revenue.html">Revenue</a>
+      <a class="nav-btn" href="projects.html">Projects</a>
+      <a class="nav-btn" href="outcomes.html">Outcomes</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>District-wise allocation</h1>
+      <p>How budget reaches all 9 districts — total allocation and per-citizen spending</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Budget allocation per district</div>
+      <div id="district-bars"></div>
+      <div class="card-links">
+        <a class="card-link" href="revenue.html">Lower-HDI districts get priority — see special grants →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">District breakdown — allocation, population, per-capita, HDI</div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>District</th><th>Population</th><th>Allocation</th><th>Per citizen</th><th>HDI</th><th>Development status</th></tr></thead>
+          <tbody id="district-tbody"></tbody>
+        </table>
+      </div>
+      <div class="card-links">
+        <a class="card-link" href="projects.html">See the development projects running in these districts →</a>
+        <a class="card-link" href="outcomes.html">How do these districts compare on outcomes? →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <nav class="footer-nav">
+      <a href="index.html">Home</a>
+      <a href="ministries.html">Ministries</a>
+      <a href="districts.html">Districts</a>
+      <a href="revenue.html">Revenue</a>
+      <a href="projects.html">Projects</a>
+      <a href="outcomes.html">Outcomes</a>
+    </nav>
+    Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book 2081/82 · CBS Nepal · Last updated: Baisakh 2082
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

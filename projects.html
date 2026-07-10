@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — Sudurpaschim Province Budget Visualizer</title>
+  <meta name="description" content="Province-level infrastructure and development projects: budget, spent, and progress.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <a class="nav-brand" href="index.html">
+      <span class="nav-title">सुदूरपश्चिम Budget</span>
+      <span class="nav-sub">Sudurpaschim Province · FY 2081/82</span>
+    </a>
+    <nav class="nav-links">
+      <a class="nav-btn" href="index.html">Home</a>
+      <a class="nav-btn" href="ministries.html">Ministries</a>
+      <a class="nav-btn" href="districts.html">Districts</a>
+      <a class="nav-btn" href="revenue.html">Revenue</a>
+      <a class="nav-btn active" href="projects.html">Projects</a>
+      <a class="nav-btn" href="outcomes.html">Outcomes</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>Capital projects tracker</h1>
+      <p>Province-level infrastructure and development projects — budget, spent, and progress</p>
+    </div>
+
+    <div class="metrics">
+      <div class="metric"><div class="metric-label">Total projects</div><div class="metric-value">8</div><div class="metric-sub" style="color:var(--color-text-tertiary)">tracked this year</div></div>
+      <div class="metric"><div class="metric-label">On track</div><div class="metric-value" style="color:#2e7d32">3</div><div class="metric-sub up">progressing well</div></div>
+      <div class="metric"><div class="metric-label">Delayed</div><div class="metric-value" style="color:#e65100">3</div><div class="metric-sub down">behind schedule</div></div>
+      <div class="metric"><div class="metric-label">Completed</div><div class="metric-value" style="color:#1565c0">2</div><div class="metric-sub" style="color:var(--color-text-tertiary)">this fiscal year</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">All capital projects</div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Project</th><th>District</th><th>Budget</th><th>Spent</th><th>Progress</th><th>Status</th></tr></thead>
+          <tbody id="projects-tbody"></tbody>
+        </table>
+      </div>
+      <p style="font-size:11px;color:var(--color-text-tertiary);margin-top:10px">Tip: tap any district name to see its full budget allocation.</p>
+      <div class="card-links">
+        <a class="card-link" href="revenue.html">Funded from the capital budget — see revenue sources →</a>
+        <a class="card-link" href="districts.html">See allocation for every district →</a>
+        <a class="card-link" href="ministries.html">Mostly Infrastructure ministry spending →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <nav class="footer-nav">
+      <a href="index.html">Home</a>
+      <a href="ministries.html">Ministries</a>
+      <a href="districts.html">Districts</a>
+      <a href="revenue.html">Revenue</a>
+      <a href="projects.html">Projects</a>
+      <a href="outcomes.html">Outcomes</a>
+    </nav>
+    Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book 2081/82 · CBS Nepal · Last updated: Baisakh 2082
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

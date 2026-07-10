@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outcomes | Sudurpaschim Budget Visualizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-brand">
+            <span class="nav-title">सुदूरपश्चिम Budget</span>
+            <span class="nav-sub">Sudurpaschim Province · FY 2081/82</span>
+        </div>
+        <div class="nav-links">
+            <a class="nav-btn" href="{{ url_for('home') }}">Home</a>
+            <a class="nav-btn" href="{{ url_for('ministries') }}">Ministries</a>
+            <a class="nav-btn" href="{{ url_for('districts') }}">Districts</a>
+            <a class="nav-btn" href="{{ url_for('revenue') }}">Revenue</a>
+            <a class="nav-btn" href="{{ url_for('projects') }}">Projects</a>
+            <a class="nav-btn active" href="{{ url_for('outcomes') }}">Outcomes</a>
+            {% if session.get("user") %}
+                <a class="nav-btn" href="{{ url_for('dashboard') }}">Admin Dashboard</a>
+                <a class="nav-btn" href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a class="nav-btn" href="{{ url_for('login') }}">Admin Login</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page active" id="page-outcomes">
+            <div class="page-header">
+                <h2>Budget vs development outcomes</h2>
+                <p>Is government spending actually improving lives? Sudurpaschim vs national average</p>
+            </div>
+
+            {% if session.get('role') == 'admin' %}
+            <div style="margin-bottom: 20px;">
+                <a href="{{ url_for('add_outcome') }}" class="nav-btn" style="background:#1a3c5e;color:white;">+ Add New Indicator</a>
+            </div>
+            {% endif %}
+
+            <div class="card">
+                <div class="card-title">Key indicators — province vs national vs target</div>
+                <div style="display:flex;gap:12px;margin-bottom:14px;font-size:11px">
+                    <span style="display:flex;align-items:center;gap:5px">
+                        <span style="width:20px;height:4px;background:#1a3c5e;border-radius:2px;display:inline-block"></span> 
+                        Sudurpaschim
+                    </span>
+                    <span style="display:flex;align-items:center;gap:5px">
+                        <span style="width:20px;height:4px;background:#EF9F27;border-radius:2px;display:inline-block"></span> 
+                        National avg
+                    </span>
+                    <span style="display:flex;align-items:center;gap:5px">
+                        <span style="width:20px;height:4px;background:#1D9E75;border-radius:2px;display:inline-block"></span> 
+                        Province target
+                    </span>
+                </div>
+                <div id="indicators-rows"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Indicators (from database)</div>
+                <div style="overflow-x:auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Indicator</th>
+                                <th>Province value</th>
+                                <th>National value</th>
+                                <th>Target value</th>
+                                {% if session.get('role') == 'admin' %}
+                                <th>Action</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for o in outcomes %}
+                            <tr>
+                                <td style="font-weight:500">{{ o.indicator }}</td>
+                                <td>{{ o.province_value }}</td>
+                                <td>{{ o.national_value }}</td>
+                                <td>{{ o.target_value }}</td>
+                                {% if session.get('role') == 'admin' %}
+                                <td>
+                                    <a href="{{ url_for('edit_outcome', id=o.id) }}" class="nav-btn" style="padding:6px 12px;font-size:12px;">Edit</a>
+                                    <a href="{{ url_for('delete_outcome', id=o.id) }}" style="display:inline-block; background:white; color:#c62828; padding:6px 14px; border:1px solid #c62828; border-radius:6px; text-decoration:none; font-size:13px; margin-left:6px;">Delete</a>
+                                </td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Budget allocation mapped to SDG goals</div>
+                <div id="sdg-rows"></div>
+            </div>
+
+            <div class="you-card">
+                <div class="you-title">Key finding — where Sudurpaschim lags most behind national average</div>
+                <div class="you-grid">
+                    <div class="you-item"><div class="you-val" style="color:#c62828">62.4%</div><div class="you-label">Literacy (national: 76.3%)</div></div>
+                    <div class="you-item"><div class="you-val" style="color:#c62828">26.8%</div><div class="you-label">Below poverty line (national: 18.7%)</div></div>
+                    <div class="you-item"><div class="you-val" style="color:#e65100">71.0%</div><div class="you-label">Health facility access (national: 80.4%)</div></div>
+                    <div class="you-item"><div class="you-val" style="color:#e65100">58.3%</div><div class="you-label">Road connectivity (national: 72.6%)</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book 2081/82 · CBS Nepal
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='data.js') }}"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

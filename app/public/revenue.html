@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revenue — Sudurpaschim Province Budget Visualizer</title>
+  <meta name="description" content="How money flows from the federal government to the province to local bodies.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <a class="nav-brand" href="index.html">
+      <span class="nav-title">सुदूरपश्चिम Budget</span>
+      <span class="nav-sub">Sudurpaschim Province · FY 2081/82</span>
+    </a>
+    <nav class="nav-links">
+      <a class="nav-btn" href="index.html">Home</a>
+      <a class="nav-btn" href="ministries.html">Ministries</a>
+      <a class="nav-btn" href="districts.html">Districts</a>
+      <a class="nav-btn active" href="revenue.html">Revenue</a>
+      <a class="nav-btn" href="projects.html">Projects</a>
+      <a class="nav-btn" href="outcomes.html">Outcomes</a>
+      <a class="nav-btn" href="report.html">Report</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>Revenue sources — 3-tier fiscal flow</h1>
+      <p>How money flows from federal government → province → 88 local bodies</p>
+    </div>
+
+    <div class="grid3">
+      <div class="flow-box">
+        <div class="flow-title">Federal government</div>
+        <div class="flow-amt">Rs 14.52 Arba</div>
+        <div class="flow-pct">76% of total budget</div>
+      </div>
+      <div class="flow-box" style="border-color:#3b8c5a">
+        <div class="flow-title">Own-source revenue</div>
+        <div class="flow-amt" style="color:#3b8c5a">Rs 3.10 Arba</div>
+        <div class="flow-pct">Tax + non-tax · 17%</div>
+      </div>
+      <div class="flow-box" style="border-color:#e6a817">
+        <div class="flow-title">Internal borrowing</div>
+        <div class="flow-amt" style="color:#854F0B">Rs 1.47 Arba</div>
+        <div class="flow-pct">Development loans · 7%</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">All revenue sources — detailed breakdown</div>
+      <div id="revenue-rows"></div>
+      <div class="card-links">
+        <a class="card-link" href="projects.html">Own-source revenue &amp; borrowing fund capital projects →</a>
+        <a class="card-link" href="ministries.html">See how the money is spent across ministries →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Federal grant types explained</div>
+      <table>
+        <thead><tr><th>Grant type</th><th>Amount</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Equalization grant</strong></td><td>Rs 824 Cr</td><td>Unconditional — province decides how to spend</td></tr>
+          <tr><td><strong>Conditional grant</strong></td><td>Rs 486 Cr</td><td>Must be spent on federal-specified <a class="inline-link" href="ministries.html">sectors</a> only</td></tr>
+          <tr><td><strong>Special grant</strong></td><td>Rs 142 Cr</td><td>Extra support for underdeveloped <a class="inline-link" href="districts.html">Karnali-adjacent districts</a></td></tr>
+          <tr><td><strong>Complementary grant</strong></td><td>Rs 110 Cr</td><td>Co-funding for specific <a class="inline-link" href="projects.html">projects</a></td></tr>
+        </tbody>
+      </table>
+      <div class="card-links">
+        <a class="card-link" href="districts.html">Which districts are prioritised for special grants? →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <nav class="footer-nav">
+      <a href="index.html">Home</a>
+      <a href="ministries.html">Ministries</a>
+      <a href="districts.html">Districts</a>
+      <a href="revenue.html">Revenue</a>
+      <a href="projects.html">Projects</a>
+      <a href="outcomes.html">Outcomes</a>
+      <a href="report.html">Report</a>
+    </nav>
+    Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book 2081/82 · CBS Nepal · Last updated: Baisakh 2082
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

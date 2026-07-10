@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Budget Summary</title>
+</head>
+<body>
+  <h1>Edit Homepage Budget Summary</h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul>
+        {% for m in messages %}<li>{{ m }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST">
+    <label>Fiscal year</label><br>
+    <input type="text" name="fiscal_year" value="{{ summary.fiscal_year or '' }}" required><br><br>
+
+    <label>Total budget</label><br>
+    <input type="number" step="0.01" name="total_budget" value="{{ summary.total_budget }}" required>
+    <select name="total_budget_unit">
+      <option value="Crore" {% if summary.total_budget_unit == "Crore" %}selected{% endif %}>Crore</option>
+      <option value="Arba" {% if summary.total_budget_unit == "Arba" %}selected{% endif %}>Arba</option>
+      <option value="Kharba" {% if summary.total_budget_unit == "Kharba" %}selected{% endif %}>Kharba</option>
+    </select><br><br>
+
+    <label>Total growth (%)</label><br>
+    <input type="number" step="0.01" name="total_growth" value="{{ summary.total_growth }}"><br><br>
+
+    <label>Capital budget</label><br>
+    <input type="number" step="0.01" name="capital_budget" value="{{ summary.capital_budget }}"><br><br>
+
+    <label>Capital percentage (%)</label><br>
+    <input type="number" step="0.01" name="capital_percentage" value="{{ summary.capital_percentage }}"><br><br>
+
+    <label>Own revenue</label><br>
+    <input type="number" step="0.01" name="own_revenue" value="{{ summary.own_revenue }}"><br><br>
+
+    <label>Own revenue percentage (%)</label><br>
+    <input type="number" step="0.01" name="own_revenue_percentage" value="{{ summary.own_revenue_percentage }}"><br><br>
+
+    <label>Federal dependency (%)</label><br>
+    <input type="number" step="0.01" name="federal_dependency" value="{{ summary.federal_dependency }}"><br><br>
+
+    <label>Education</label><br>
+    <input type="number" step="0.01" name="education" value="{{ summary.education }}"><br><br>
+
+    <label>Health</label><br>
+    <input type="number" step="0.01" name="health" value="{{ summary.health }}"><br><br>
+
+    <label>Infrastructure</label><br>
+    <input type="number" step="0.01" name="infrastructure" value="{{ summary.infrastructure }}"><br><br>
+
+    <label>Agriculture</label><br>
+    <input type="number" step="0.01" name="agriculture" value="{{ summary.agriculture }}"><br><br>
+
+    <button type="submit">Update</button>
+  </form>
+
+  <br>
+  <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin dashboard — Sudurpaschim Budget</title>
+  <style>
+    :root { --navy:#1a3c5e; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Inter','Segoe UI','Noto Sans Devanagari',system-ui,sans-serif; background:#f4f6f9; color:#16202c; }
+    .bar { background:var(--navy); color:#fff; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .bar .t { font-size:15px; font-weight:500; }
+    .bar .t small { display:block; font-size:11px; color:rgba(255,255,255,0.6); font-weight:400; }
+    .bar .right { display:flex; align-items:center; gap:14px; font-size:13px; }
+    .bar a, .bar button { color:#fff; }
+    .bar a { text-decoration:none; opacity:0.85; font-size:12.5px; }
+    .bar a:hover { opacity:1; text-decoration:underline; }
+    .logout { background:rgba(255,255,255,0.15); border:none; padding:6px 12px; border-radius:6px; font-size:12.5px; cursor:pointer; font-family:inherit; }
+    .logout:hover { background:rgba(255,255,255,0.25); }
+
+    .wrap { max-width:980px; margin:0 auto; padding:22px 16px; }
+    .intro { font-size:13px; color:#4b5663; line-height:1.55; margin-bottom:18px; }
+    .intro code { background:#eef1f5; padding:1px 5px; border-radius:4px; font-size:12px; }
+
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; }
+    .card { background:#fff; border:0.5px solid #e4e8ee; border-radius:10px; padding:16px 18px; }
+    .card h3 { font-size:14px; font-weight:600; color:var(--navy); text-transform:capitalize; }
+    .rows { font-size:11px; color:#8b94a1; margin:3px 0 10px; }
+    .cols { font-size:11px; color:#4b5663; background:#f4f6f9; border:0.5px solid #e4e8ee; border-radius:6px; padding:7px 9px; margin-bottom:12px; line-height:1.5; word-break:break-word; }
+    .cols b { color:#16202c; }
+    .file { font-size:12px; width:100%; margin-bottom:10px; }
+    .file::file-selector-button { font-family:inherit; font-size:12px; padding:6px 10px; margin-right:10px; border:1px solid #cfd6de; background:#fff; border-radius:6px; cursor:pointer; }
+    .actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .up { background:var(--navy); color:#fff; border:none; padding:8px 14px; border-radius:7px; font-size:13px; font-weight:500; cursor:pointer; font-family:inherit; }
+    .up:hover { background:#15324f; }
+    .up:disabled { opacity:0.6; cursor:default; }
+    .sample { font-size:12px; color:var(--navy); text-decoration:none; }
+    .sample:hover { text-decoration:underline; }
+    .status { font-size:12px; margin-top:10px; min-height:15px; }
+    .status.ok { color:#1f7a3d; }
+    .status.err { color:#c62828; }
+
+    .history { background:#fff; border:0.5px solid #e4e8ee; border-radius:10px; padding:16px 18px; margin-top:20px; }
+    .history h2 { font-size:14px; font-weight:600; color:var(--navy); margin-bottom:10px; }
+    table { width:100%; border-collapse:collapse; font-size:12.5px; }
+    th { text-align:left; padding:7px 10px; background:#eef1f5; color:#4b5663; font-weight:500; font-size:11.5px; }
+    td { padding:8px 10px; border-bottom:0.5px solid #e4e8ee; }
+    tr:last-child td { border-bottom:none; }
+    .empty { font-size:12.5px; color:#8b94a1; }
+    .loading { padding:40px 0; text-align:center; color:#8b94a1; font-size:13px; }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <div class="t">सुदूरपश्चिम Budget — Admin<small>Sudurpaschim Province · FY 2081/82</small></div>
+    <div class="right">
+      <a href="/index.html" target="_blank">View site ↗</a>
+      <span id="who"></span>
+      <button class="logout" id="logoutBtn">Log out</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div id="boot" class="loading">Checking your session…</div>
+
+    <div id="main" style="display:none">
+      <p class="intro">
+        Upload a <code>.csv</code> file for any dataset below to replace its contents. The first row must be the
+        header with the exact column names shown on each card. Download a sample to see the expected format.
+        <b>Uploading replaces all existing rows</b> for that dataset.
+      </p>
+      <div class="grid" id="cards"></div>
+
+      <div class="history">
+        <h2>Recent uploads</h2>
+        <div id="history"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const boot = document.getElementById('boot');
+    const main = document.getElementById('main');
+
+    async function api(url, opts) {
+      const res = await fetch(url, opts);
+      if (res.status === 401) { window.location.href = '/admin/login.html'; throw new Error('auth'); }
+      return res;
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      window.location.href = '/admin/login.html';
+    });
+
+    async function init() {
+      // 1) confirm we're logged in
+      let me;
+      try {
+        const res = await api('/api/auth/me');
+        me = (await res.json()).user;
+      } catch (e) { return; } // redirected to login
+      document.getElementById('who').textContent = 'Signed in as ' + me.username;
+
+      // 2) render an upload card per dataset
+      const datasets = await (await api('/api/datasets')).json();
+      const cards = document.getElementById('cards');
+      cards.innerHTML = datasets.map((d) => `
+        <div class="card">
+          <h3>${d.name}</h3>
+          <div class="rows">${d.rows} row${d.rows === 1 ? '' : 's'} currently stored</div>
+          <div class="cols"><b>Columns:</b> ${d.columns.join(', ')}</div>
+          <input class="file" type="file" accept=".csv" data-ds="${d.name}">
+          <div class="actions">
+            <button class="up" data-ds="${d.name}">Upload CSV</button>
+            <a class="sample" href="/admin/samples/${d.name}.csv" download>Download sample</a>
+          </div>
+          <div class="status" id="status-${d.name}"></div>
+        </div>
+      `).join('');
+
+      cards.querySelectorAll('.up').forEach((btn) => {
+        btn.addEventListener('click', () => uploadOne(btn.dataset.ds));
+      });
+
+      // 3) show recent uploads
+      renderHistory();
+      boot.style.display = 'none';
+      main.style.display = 'block';
+    }
+
+    async function uploadOne(ds) {
+      const input = document.querySelector(`.file[data-ds="${ds}"]`);
+      const btn = document.querySelector(`.up[data-ds="${ds}"]`);
+      const status = document.getElementById('status-' + ds);
+      status.className = 'status';
+      status.textContent = '';
+
+      if (!input.files || !input.files[0]) {
+        status.className = 'status err';
+        status.textContent = 'Choose a .csv file first.';
+        return;
+      }
+      const fd = new FormData();
+      fd.append('file', input.files[0]);
+
+      btn.disabled = true; btn.textContent = 'Uploading…';
+      try {
+        const res = await api('/api/admin/upload/' + ds, { method: 'POST', body: fd });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Upload failed');
+        status.className = 'status ok';
+        status.textContent = `✓ Loaded ${data.rows} rows. Refreshing…`;
+        setTimeout(init, 800); // refresh counts + history
+      } catch (err) {
+        if (err.message === 'auth') return;
+        status.className = 'status err';
+        status.textContent = err.message;
+      } finally {
+        btn.disabled = false; btn.textContent = 'Upload CSV';
+      }
+    }
+
+    async function renderHistory() {
+      const box = document.getElementById('history');
+      const log = await (await api('/api/admin/uploads')).json();
+      if (!log.length) { box.innerHTML = '<div class="empty">No uploads yet.</div>'; return; }
+      box.innerHTML = `<table>
+        <thead><tr><th>When</th><th>Dataset</th><th>Rows</th><th>File</th><th>By</th></tr></thead>
+        <tbody>${log.map((u) => `<tr>
+          <td>${u.created_at}</td>
+          <td style="text-transform:capitalize">${u.dataset}</td>
+          <td>${u.rows}</td>
+          <td>${u.filename || '—'}</td>
+          <td>${u.username || '—'}</td>
+        </tr>`).join('')}</tbody>
+      </table>`;
+    }
+
+    init();
+  </script>
+</body>
+</html>

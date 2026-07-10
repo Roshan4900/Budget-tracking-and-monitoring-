@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report — Sudurpaschim Province Budget Visualizer</title>
+  <meta name="description" content="Budget-vs-progress efficiency report for projects and districts.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <a class="nav-brand" href="index.html">
+      <span class="nav-title">सुदूरपश्चिम Budget</span>
+      <span class="nav-sub">Sudurpaschim Province · FY 2081/82</span>
+    </a>
+    <nav class="nav-links">
+      <a class="nav-btn" href="index.html">Home</a>
+      <a class="nav-btn" href="ministries.html">Ministries</a>
+      <a class="nav-btn" href="districts.html">Districts</a>
+      <a class="nav-btn" href="revenue.html">Revenue</a>
+      <a class="nav-btn" href="projects.html">Projects</a>
+      <a class="nav-btn" href="outcomes.html">Outcomes</a>
+      <a class="nav-btn active" href="report.html">Report</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>Budget vs progress report</h1>
+      <p>Is the money being spent in line with the work actually delivered? A project-wise and district-wise efficiency check · FY 2081/82</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">How to read this report</div>
+      <div class="report-intro">
+        Each item compares <strong>budget used</strong> (how much money has been spent) against <strong>work done</strong> (physical progress on the ground). When spending races ahead of progress, the budget can run out before the work is finished. For example, a project with Rs 40 Cr that has spent Rs 38 Cr (95%) but completed only 30% of the work has just 5% of its budget left for 70% of the remaining work — a clear overspend.
+      </div>
+      <div class="report-legend">
+        <div><span class="legend-sw" style="background:#1D9E75"></span> Efficient — work ahead of spending</div>
+        <div><span class="legend-sw" style="background:#2e7d32"></span> On track — spending matches progress</div>
+        <div><span class="legend-sw" style="background:#e65100"></span> Watch — spending ahead of progress</div>
+        <div><span class="legend-sw" style="background:#c62828"></span> Over budget — spending far ahead of progress</div>
+        <div><span class="legend-sw" style="background:#1565c0"></span> Completed</div>
+      </div>
+    </div>
+
+    <div id="report-headline"></div>
+
+    <h2 class="section-head">Project-wise report</h2>
+    <div class="metrics" id="report-proj-metrics"></div>
+    <div class="card">
+      <div class="card-title">Each project — budget used vs work done</div>
+      <div id="report-projects"></div>
+      <div class="card-links">
+        <a class="card-link" href="projects.html">Back to the projects tracker →</a>
+      </div>
+    </div>
+
+    <h2 class="section-head">District-wise report</h2>
+    <div class="metrics" id="report-dist-metrics"></div>
+    <div class="card">
+      <div class="card-title">Each district — budget used vs work done</div>
+      <div id="report-districts"></div>
+      <div class="card-links">
+        <a class="card-link" href="districts.html">Back to district allocations →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <nav class="footer-nav">
+      <a href="index.html">Home</a>
+      <a href="ministries.html">Ministries</a>
+      <a href="districts.html">Districts</a>
+      <a href="revenue.html">Revenue</a>
+      <a href="projects.html">Projects</a>
+      <a href="outcomes.html">Outcomes</a>
+      <a href="report.html">Report</a>
+    </nav>
+    Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book 2081/82 · CBS Nepal · Last updated: Baisakh 2082
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Project</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Edit Project</h1>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+
+        <label>Project Name</label><br>
+        <input type="text" name="project_name" value="{{ project.project_name }}" required><br><br>
+
+        <label>District</label><br>
+        <input type="text" name="district" value="{{ project.district }}" required><br><br>
+
+        <label>Budget</label><br>
+        <input type="number" step="0.01" name="budget" value="{{ project.budget }}" required><br><br>
+
+        <label>Spent</label><br>
+        <input type="number" step="0.01" name="spent" value="{{ project.spent }}" required><br><br>
+
+        <label>Progress (%)</label><br>
+        <input type="number" name="progress" value="{{ project.progress }}" required><br><br>
+
+        <label>Status</label><br>
+        <input type="text" name="status" value="{{ project.status }}" required><br><br>
+
+        <button type="submit">Update Project</button>
+
+        <a href="{{ url_for('projects') }}">
+            <button type="button">Cancel</button>
+        </a>
+
+    </form>
+
+</div>
+
+</body>
+</html>

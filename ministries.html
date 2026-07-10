@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ministries — Sudurpaschim Province Budget Visualizer</title>
+  <meta name="description" content="Ministry-wise expenditure across 9 provincial ministries for FY 2081/82.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <a class="nav-brand" href="index.html">
+      <span class="nav-title">सुदूरपश्चिम Budget</span>
+      <span class="nav-sub">Sudurpaschim Province · FY 2081/82</span>
+    </a>
+    <nav class="nav-links">
+      <a class="nav-btn" href="index.html">Home</a>
+      <a class="nav-btn active" href="ministries.html">Ministries</a>
+      <a class="nav-btn" href="districts.html">Districts</a>
+      <a class="nav-btn" href="revenue.html">Revenue</a>
+      <a class="nav-btn" href="projects.html">Projects</a>
+      <a class="nav-btn" href="outcomes.html">Outcomes</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>Ministry-wise expenditure</h1>
+      <p>How the Rs 18.42 Arba budget is split across 9 provincial ministries · FY 2081/82 vs 2080/81</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">This year vs last year (Crore Rs)</div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Ministry</th><th>नेपाली</th><th>2081/82</th><th>2080/81</th><th>Change</th><th>Share</th></tr></thead>
+          <tbody id="ministry-tbody"></tbody>
+        </table>
+      </div>
+      <div class="card-links">
+        <a class="card-link" href="districts.html">See how this spending reaches the 9 districts →</a>
+        <a class="card-link" href="revenue.html">Where does this money come from? →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Visual comparison — 2081/82 vs 2080/81</div>
+      <div id="ministry-bars"></div>
+      <div class="card-links">
+        <a class="card-link" href="projects.html">Infrastructure leads — track those capital projects →</a>
+        <a class="card-link" href="outcomes.html">Is this spending improving development outcomes? →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <nav class="footer-nav">
+      <a href="index.html">Home</a>
+      <a href="ministries.html">Ministries</a>
+      <a href="districts.html">Districts</a>
+      <a href="revenue.html">Revenue</a>
+      <a href="projects.html">Projects</a>
+      <a href="outcomes.html">Outcomes</a>
+    </nav>
+    Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book 2081/82 · CBS Nepal · Last updated: Baisakh 2082
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

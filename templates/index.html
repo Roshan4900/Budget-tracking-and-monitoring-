@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sudurpaschim Province Budget Visualizer | FY 2081/82</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- NAV BAR -->
+  <div class="navbar">
+    <div class="nav-brand">
+      <span class="nav-title">सुदूरपश्चिम Budget</span>
+      <span class="nav-sub">Sudurpaschim Province · FY {{ fiscal_year|default('2081/82') }}</span>
+    </div>
+    <div class="nav-links">
+      <a class="nav-btn active" href="{{ url_for('home') }}">Home</a>
+      <a class="nav-btn" href="{{ url_for('ministries') }}">Ministries</a>
+      <a class="nav-btn" href="{{ url_for('districts') }}">Districts</a>
+      <a class="nav-btn" href="{{ url_for('revenue') }}">Revenue</a>
+      <a class="nav-btn" href="{{ url_for('projects') }}">Projects</a>
+      <a class="nav-btn" href="{{ url_for('outcomes') }}">Outcomes</a>
+      
+      {% if session.get("user") %}
+        <a class="nav-btn" href="{{ url_for('dashboard') }}">Admin Dashboard</a>
+        <a class="nav-btn" href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+        <a class="nav-btn" href="{{ url_for('login') }}">Admin Login</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- HOME PAGE -->
+    <div class="page active" id="page-home">
+      <div class="page-header">
+        <h2>Province Budget — Snapshot</h2>
+        <p>Sudurpaschim Pradesh · Fiscal Year {{ fiscal_year|default('2081/82') }} · Data from Province Finance Ministry</p>
+      </div>
+
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-label">Total budget</div>
+          <div class="metric-value">{{ total_budget|default(18.42) | format_number(unit=False) }} {{ total_budget_unit|default('Crore') }}</div>
+          <div class="metric-sub up">↑ {{ total_growth|default('9.6') }}% vs last year</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Capital budget</div>
+          <div class="metric-value">{{ capital_budget|default(8.62) | format_number(unit=False) }} {{ capital_budget_unit|default('Crore') }}</div>
+          <div class="metric-sub" style="color:var(--color-text-tertiary)">{{ capital_percentage|default(47) }}% of total</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Own-source revenue</div>
+          <div class="metric-value">{{ own_revenue|default(3.10) | format_number(unit=False) }} {{ own_revenue_unit|default('Crore') }}</div>
+          <div class="metric-sub" style="color:var(--color-text-tertiary)">{{ own_revenue_percentage|default(17) }}% of total</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Per citizen spending</div>
+          <div class="metric-value">Rs {{ per_citizen_spending|default(6127) | format_number(unit=False) }} {{ per_citizen_spending_unit|default('Rs') }}</div>
+          <div class="metric-sub" style="color:var(--color-text-tertiary)">{{ population|default('30.06') }} lakh population</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Federal dependency</div>
+          <div class="metric-value">{{ federal_dependency|default(76) }}{{ federal_dependency_unit|default('%') }}</div>
+          <div class="metric-sub down">Budget from federal grants</div>
+        </div>
+      </div>
+
+<div class="grid2">
+  <div class="card">
+    <div class="card-title">Spending by ministry</div>
+    <canvas id="ministryChart" height="220"></canvas>
+  </div>
+  <div class="card">
+    <div class="card-title">Revenue Sources</div>
+    <canvas id="revenueChart" height="220"></canvas>
+  </div>
+</div>
+
+      <div class="you-card">
+        <div class="you-title">What this means for every citizen of Sudurpaschim</div>
+        <div class="you-grid">
+          <div class="you-item">
+            <div class="you-val">Rs {{ per_citizen_spending|default(6127) | format_number(unit=False) }}</div>
+            <div class="you-label">Per person spending</div>
+          </div>
+          <div class="you-item">
+            <div class="you-val">Rs {{ education_per_person|default(1371) | format_number(unit=False) }}</div>
+            <div class="you-label">On your education</div>
+          </div>
+          <div class="you-item">
+            <div class="you-val">Rs {{ health_per_person|default(1052) | format_number(unit=False) }}</div>
+            <div class="you-label">On your health</div>
+          </div>
+          <div class="you-item">
+            <div class="you-val">Rs {{ roads_per_person|default(1775) | format_number(unit=False) }}</div>
+            <div class="you-label">On roads near you</div>
+          </div>
+          <div class="you-item">
+            <div class="you-val">Rs {{ agriculture_per_person|default(801) | format_number(unit=False) }}</div>
+            <div class="you-label">On farming support</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book {{ fiscal_year|default('2081/82') }} · CBS Nepal · Last updated: Baisakh 2082
+  </footer>
+
+  <!-- Scripts -->
+  <script src="{{ url_for('static', filename='data.js') }}"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <script>
+  const ministryData = {{ ministry_chart_data | tojson }};
+  const revenueData = {{ revenue_chart_data | tojson }};
+
+  new Chart(document.getElementById('ministryChart'), {
+    type: 'bar',
+    data: {
+      labels: ministryData.map(m => m.name),
+      datasets: [{
+        label: 'Budget (Rs Cr)',
+        data: ministryData.map(m => m.budget),
+        backgroundColor: '#1a3c5e'
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { x: { beginAtZero: true } }
+    }
+  });
+
+  new Chart(document.getElementById('revenueChart'), {
+    type: 'bar',
+    data: {
+      labels: revenueData.map(r => r.name),
+      datasets: [{
+        label: 'Amount (Rs Cr)',
+        data: revenueData.map(r => r.amount),
+        backgroundColor: '#378ADD'
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { x: { beginAtZero: true } }
+    }
+  });
+</script>
+</body>
+</html>

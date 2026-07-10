@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Revenue | Sudurpaschim Budget Visualizer</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a class="nav-brand" href="{{ url_for('home') }}">
+        <span class="nav-title">सुदूरपश्चिम Budget</span>
+        <span class="nav-sub">Sudurpaschim Province</span>
+    </a>
+
+</header>
+
+<main class="container">
+
+<div class="page-header">
+    <h1>Edit Revenue Source</h1>
+    <p>Update revenue information.</p>
+</div>
+
+<div class="card">
+
+<form method="POST">
+
+<label><b>Revenue Source</b></label><br>
+<input
+type="text"
+name="source"
+value="{{ revenue.source }}"
+required
+style="width:100%; padding:10px;"><br><br>
+
+<label><b>Amount (Arba)</b></label><br>
+<input
+type="number"
+step="0.01"
+name="amount"
+value="{{ revenue.amount }}"
+required
+style="width:100%; padding:10px;"><br><br>
+
+<label><b>Percentage (%)</b></label><br>
+<input
+type="number"
+step="0.01"
+name="percentage"
+value="{{ revenue.percentage }}"
+required
+style="width:100%; padding:10px;"><br><br>
+
+<button class="nav-btn" type="submit">
+Update Revenue
+</button>
+
+<a href="{{ url_for('revenue') }}">
+<button class="nav-btn" type="button">
+Cancel
+</button>
+</a>
+
+</form>
+
+</div>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outcomes — Sudurpaschim Province Budget Visualizer</title>
+  <meta name="description" content="Is government spending improving lives? Sudurpaschim vs the national average.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <a class="nav-brand" href="index.html">
+      <span class="nav-title">सुदूरपश्चिम Budget</span>
+      <span class="nav-sub">Sudurpaschim Province · FY 2081/82</span>
+    </a>
+    <nav class="nav-links">
+      <a class="nav-btn" href="index.html">Home</a>
+      <a class="nav-btn" href="ministries.html">Ministries</a>
+      <a class="nav-btn" href="districts.html">Districts</a>
+      <a class="nav-btn" href="revenue.html">Revenue</a>
+      <a class="nav-btn" href="projects.html">Projects</a>
+      <a class="nav-btn active" href="outcomes.html">Outcomes</a>
+      <a class="nav-btn" href="report.html">Report</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>Budget vs development outcomes</h1>
+      <p>Is government spending actually improving lives? Sudurpaschim vs national average</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Key indicators — province vs national vs target</div>
+      <div style="display:flex;gap:12px;margin-bottom:14px;font-size:11px;flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:20px;height:4px;background:#1a3c5e;border-radius:2px;display:inline-block"></span> Sudurpaschim</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:20px;height:4px;background:#EF9F27;border-radius:2px;display:inline-block"></span> National avg</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:20px;height:4px;background:#1D9E75;border-radius:2px;display:inline-block"></span> Province target</span>
+      </div>
+      <div id="indicators-rows"></div>
+      <div class="card-links">
+        <a class="card-link" href="ministries.html">Compare these gaps against ministry spending →</a>
+        <a class="card-link" href="districts.html">The worst gaps cluster in priority districts →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Budget allocation mapped to SDG goals</div>
+      <div id="sdg-rows"></div>
+      <div class="card-links">
+        <a class="card-link" href="ministries.html">These SDG allocations mirror the ministry budgets →</a>
+      </div>
+    </div>
+
+    <div class="you-card">
+      <div class="you-title">Key finding — where Sudurpaschim lags most behind national average</div>
+      <div class="you-grid">
+        <div class="you-item"><div class="you-val" style="color:#c62828">62.4%</div><div class="you-label">Literacy (national: 76.3%)</div></div>
+        <div class="you-item"><div class="you-val" style="color:#c62828">26.8%</div><div class="you-label">Below poverty line (national: 18.7%)</div></div>
+        <div class="you-item"><div class="you-val" style="color:#e65100">71.0%</div><div class="you-label">Health facility access (national: 80.4%)</div></div>
+        <div class="you-item"><div class="you-val" style="color:#e65100">58.3%</div><div class="you-label">Road connectivity (national: 72.6%)</div></div>
+      </div>
+      <div class="you-links">
+        <a href="revenue.html">Special grants aim to close these gaps →</a>
+        <a href="projects.html">See the projects targeting roads &amp; services →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <nav class="footer-nav">
+      <a href="index.html">Home</a>
+      <a href="ministries.html">Ministries</a>
+      <a href="districts.html">Districts</a>
+      <a href="revenue.html">Revenue</a>
+      <a href="projects.html">Projects</a>
+      <a href="outcomes.html">Outcomes</a>
+      <a href="report.html">Report</a>
+    </nav>
+    Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book 2081/82 · CBS Nepal · Last updated: Baisakh 2082
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

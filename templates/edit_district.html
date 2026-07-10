@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit District</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a class="nav-brand" href="{{ url_for('home') }}">
+        <span class="nav-title">सुदूरपश्चिम Budget</span>
+        <span class="nav-sub">Sudurpaschim Province</span>
+    </a>
+
+</header>
+
+<main class="container">
+
+<div class="page-header">
+    <h1>Edit District</h1>
+    <p>Update district information.</p>
+</div>
+
+<div class="card">
+
+<form method="POST">
+
+<label><b>District Name</b></label><br>
+<input type="text"
+name="district_name"
+value="{{ district.district_name }}"
+required
+style="width:100%; padding:10px;"><br><br>
+
+<label><b>Population</b></label><br>
+<input type="number"
+name="population"
+value="{{ district.population }}"
+required
+style="width:100%; padding:10px;"><br><br>
+
+<label><b>Allocation</b></label><br>
+<input type="number"
+step="0.01"
+name="allocation"
+value="{{ district.allocation }}"
+required
+style="width:100%; padding:10px;"><br><br>
+
+<label><b>Per Citizen</b></label><br>
+<input type="number"
+step="0.01"
+name="per_citizen"
+value="{{ district.per_citizen }}"
+required
+style="width:100%; padding:10px;"><br><br>
+
+<label><b>HDI</b></label><br>
+<input type="number"
+step="0.01"
+name="hdi"
+value="{{ district.hdi }}"
+required
+style="width:100%; padding:10px;"><br><br>
+
+<label><b>Status</b></label><br>
+<input type="text"
+name="status"
+value="{{ district.status }}"
+required
+style="width:100%; padding:10px;"><br><br>
+
+<button class="nav-btn" type="submit">
+Update District
+</button>
+
+<a href="{{ url_for('districts') }}">
+<button class="nav-btn" type="button">
+Cancel
+</button>
+</a>
+
+</form>
+
+</div>
+
+</main>
+
+</body>
+</html>

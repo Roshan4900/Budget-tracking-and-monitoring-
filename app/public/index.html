@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home — Sudurpaschim Province Budget Visualizer</title>
+  <meta name="description" content="Snapshot of the Sudurpaschim Province budget for FY 2081/82.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <a class="nav-brand" href="index.html">
+      <span class="nav-title">सुदूरपश्चिम Budget</span>
+      <span class="nav-sub">Sudurpaschim Province · FY 2081/82</span>
+    </a>
+    <nav class="nav-links">
+      <a class="nav-btn active" href="index.html">Home</a>
+      <a class="nav-btn" href="ministries.html">Ministries</a>
+      <a class="nav-btn" href="districts.html">Districts</a>
+      <a class="nav-btn" href="revenue.html">Revenue</a>
+      <a class="nav-btn" href="projects.html">Projects</a>
+      <a class="nav-btn" href="outcomes.html">Outcomes</a>
+      <a class="nav-btn" href="report.html">Report</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>Province Budget — Snapshot</h1>
+      <p>Sudurpaschim Pradesh · Fiscal Year 2081/82 · Data from Province Finance Ministry</p>
+    </div>
+
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-label">Total budget</div>
+        <div class="metric-value">Rs 18.42 Arba</div>
+        <div class="metric-sub up">↑ 9.6% vs last year</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Capital budget</div>
+        <div class="metric-value">Rs 8.62 Arba</div>
+        <div class="metric-sub" style="color:var(--color-text-tertiary)">47% of total</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Own-source revenue</div>
+        <div class="metric-value">Rs 3.10 Arba</div>
+        <div class="metric-sub" style="color:var(--color-text-tertiary)">17% of total</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Per citizen spending</div>
+        <div class="metric-value">Rs 6,127</div>
+        <div class="metric-sub" style="color:var(--color-text-tertiary)">30.06 lakh population</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Federal dependency</div>
+        <div class="metric-value">76%</div>
+        <div class="metric-sub down">Budget from federal grants</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Spending by ministry</div>
+        <div class="bar-row"><div class="bar-label">Infrastructure</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:#1a3c5e"></div></div><div class="bar-val">Rs 412 Cr</div></div>
+        <div class="bar-row"><div class="bar-label">Education</div><div class="bar-track"><div class="bar-fill" style="width:77%;background:#378ADD"></div></div><div class="bar-val">Rs 318 Cr</div></div>
+        <div class="bar-row"><div class="bar-label">Health</div><div class="bar-track"><div class="bar-fill" style="width:59%;background:#1D9E75"></div></div><div class="bar-val">Rs 244 Cr</div></div>
+        <div class="bar-row"><div class="bar-label">Agriculture</div><div class="bar-track"><div class="bar-fill" style="width:48%;background:#EF9F27"></div></div><div class="bar-val">Rs 198 Cr</div></div>
+        <div class="bar-row"><div class="bar-label">Social Development</div><div class="bar-track"><div class="bar-fill" style="width:45%;background:#7F77DD"></div></div><div class="bar-val">Rs 186 Cr</div></div>
+        <div class="bar-row"><div class="bar-label">Internal Affairs</div><div class="bar-track"><div class="bar-fill" style="width:41%;background:#888780"></div></div><div class="bar-val">Rs 168 Cr</div></div>
+        <div class="bar-row"><div class="bar-label">Forest &amp; Environment</div><div class="bar-track"><div class="bar-fill" style="width:34%;background:#3B6D11"></div></div><div class="bar-val">Rs 142 Cr</div></div>
+        <div class="bar-row"><div class="bar-label">Industry &amp; Tourism</div><div class="bar-track"><div class="bar-fill" style="width:24%;background:#854F0B"></div></div><div class="bar-val">Rs 98 Cr</div></div>
+        <div class="bar-row"><div class="bar-label">Law &amp; Parliament</div><div class="bar-track"><div class="bar-fill" style="width:18%;background:#B4B2A9"></div></div><div class="bar-val">Rs 76 Cr</div></div>
+        <div class="card-links">
+          <a class="card-link" href="ministries.html">Full ministry breakdown →</a>
+          <a class="card-link" href="projects.html">Track capital projects →</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Revenue sources</div>
+        <div class="donut-wrap">
+          <svg viewBox="0 0 120 120" width="120" height="120" style="flex-shrink:0" role="img" aria-label="Revenue donut chart">
+            <circle cx="60" cy="60" r="44" fill="none" stroke="#E6F1FB" stroke-width="20"/>
+            <circle cx="60" cy="60" r="44" fill="none" stroke="#1a3c5e" stroke-width="20" stroke-dasharray="209 67" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
+            <circle cx="60" cy="60" r="44" fill="none" stroke="#3b8c5a" stroke-width="20" stroke-dasharray="48 228" stroke-dashoffset="-209" transform="rotate(-90 60 60)"/>
+            <circle cx="60" cy="60" r="44" fill="none" stroke="#e6a817" stroke-width="20" stroke-dasharray="20 257" stroke-dashoffset="-257" transform="rotate(-90 60 60)"/>
+            <text x="60" y="56" text-anchor="middle" font-size="9" fill="var(--color-text-tertiary)" font-family="var(--font-sans)">Total</text>
+            <text x="60" y="68" text-anchor="middle" font-size="11" font-weight="500" fill="var(--color-text-primary)" font-family="var(--font-sans)">18.42 Arba</text>
+          </svg>
+          <div class="donut-legend">
+            <div class="legend-row"><div class="dot" style="background:#1a3c5e"></div>Federal grants — 76%</div>
+            <div class="legend-row"><div class="dot" style="background:#3b8c5a"></div>Own-source revenue — 17%</div>
+            <div class="legend-row"><div class="dot" style="background:#e6a817"></div>Internal borrowing — 7%</div>
+            <div style="margin-top:10px;padding-top:10px;border-top:0.5px solid var(--color-border-tertiary)">
+              <div style="font-size:11px;color:var(--color-text-tertiary)">76% federal dependency means</div>
+              <div style="font-size:12px;color:var(--color-text-secondary);margin-top:2px">the province cannot function without Kathmandu's transfers</div>
+            </div>
+          </div>
+        </div>
+        <div class="card-links">
+          <a class="card-link" href="revenue.html">See the full 3-tier fiscal flow →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="you-card">
+      <div class="you-title">What this means for every citizen of Sudurpaschim</div>
+      <div class="you-grid">
+        <div class="you-item"><div class="you-val">Rs 6,127</div><div class="you-label">Per person spending</div></div>
+        <div class="you-item"><div class="you-val">Rs 1,371</div><div class="you-label">On your education</div></div>
+        <div class="you-item"><div class="you-val">Rs 1,052</div><div class="you-label">On your health</div></div>
+        <div class="you-item"><div class="you-val">Rs 1,775</div><div class="you-label">On roads near you</div></div>
+        <div class="you-item"><div class="you-val">Rs 801</div><div class="you-label">On farming support</div></div>
+      </div>
+      <div class="you-links">
+        <a href="districts.html">How per-citizen spending varies by district →</a>
+        <a href="outcomes.html">Is this spending improving lives? →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <nav class="footer-nav">
+      <a href="index.html">Home</a>
+      <a href="ministries.html">Ministries</a>
+      <a href="districts.html">Districts</a>
+      <a href="revenue.html">Revenue</a>
+      <a href="projects.html">Projects</a>
+      <a href="outcomes.html">Outcomes</a>
+      <a href="report.html">Report</a>
+    </nav>
+    Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book 2081/82 · CBS Nepal · Last updated: Baisakh 2082
+  </footer>
+
+</body>
+</html>

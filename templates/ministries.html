@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ministries | Sudurpaschim Budget Visualizer</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<div class="navbar">
+<div class="nav-brand">
+<span class="nav-title">सुदूरपश्चिम Budget</span>
+<span class="nav-sub">Sudurpaschim Province · FY 2081/82</span>
+</div>
+<div class="nav-links">
+<a class="nav-btn" href="{{ url_for('home') }}">Home</a>
+<a class="nav-btn active" href="{{ url_for('ministries') }}">Ministries</a>
+<a class="nav-btn" href="{{ url_for('districts') }}">Districts</a>
+<a class="nav-btn" href="{{ url_for('revenue') }}">Revenue</a>
+<a class="nav-btn" href="{{ url_for('projects') }}">Projects</a>
+<a class="nav-btn" href="{{ url_for('outcomes') }}">Outcomes</a>
+      {% if session.get("user") %}
+<a class="nav-btn" href="{{ url_for('dashboard') }}">Admin Dashboard</a>
+<a class="nav-btn" href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+<a class="nav-btn" href="{{ url_for('login') }}">Admin Login</a>
+      {% endif %}
+</div>
+</div>
+<div class="container">
+<div class="page active" id="page-ministry">
+<div class="page-header">
+<h2>Ministry-wise expenditure</h2>
+<p>How the Rs 18.42 Arba budget is split across 9 provincial ministries · FY 2081/82 vs 2080/81</p>
+</div>
+      {% if session.get('role') == 'admin' %}
+<div style="margin-bottom: 20px;">
+<a href="{{ url_for('add_ministry') }}" class="nav-btn" style="background:#1a3c5e;color:white;">+ Add New Ministry</a>
+</div>
+      {% endif %}
+<div class="card">
+<div class="card-title">This year vs last year (Crore Rs)</div>
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr>
+<th>Ministry</th>
+<th>नेपाली</th>
+<th>2081/82</th>
+<th>2080/81</th>
+<th>Change</th>
+<th>Share</th>
+                {% if session.get('role') == 'admin' %}
+<th>Action</th>
+                {% endif %}
+</tr>
+</thead>
+<tbody>
+              {% for m in ministries %}
+<tr>
+<td style="font-weight:500">{{ m.ministry_name }}</td>
+<td style="color:var(--color-text-secondary)">{{ m.nepali_name or '-' }}</td>
+<td>Rs {{ m.budget_2081 | round(1) }} Cr</td>
+<td style="color:var(--color-text-tertiary)">Rs {{ m.budget_2080 | round(1) }} Cr</td>
+<td class="{{ 'up' if m.budget_2081 > m.budget_2080 else 'down' }}">
+                  {{ '↑' if m.budget_2081 > m.budget_2080 else '↓' }} 
+                  {{ ((m.budget_2081 - m.budget_2080)/m.budget_2080*100)|round(1) }}%
+</td>
+<td style="color:var(--color-text-tertiary)">
+                  {{ ((m.budget_2081 / ministries|sum(attribute='budget_2081')) * 100)|round(1) }}%
+</td>
+                {% if session.get('role') == 'admin' %}
+<td>
+<a href="{{ url_for('edit_ministry', id=m.id) }}" 
+class="nav-btn" style="padding:6px 12px;font-size:12px;">Edit</a>
+<a href="{{ url_for('delete_ministry', id=m.id) }}" style="display:inline-block; background:white; color:#c62828; padding:6px 14px; border:1px solid #c62828; border-radius:6px; text-decoration:none; font-size:13px; margin-left:6px;">Delete</a>
+</td>
+                {% endif %}
+</tr>
+              {% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+<div class="card">
+<div class="card-title">Visual comparison — 2081/82 vs 2080/81</div>
+<div id="ministry-bars"></div>
+</div>
+</div>
+</div>
+<footer class="footer">
+    Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book 2081/82
+</footer>
+<script src="{{ url_for('static', filename='data.js') }}"></script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
