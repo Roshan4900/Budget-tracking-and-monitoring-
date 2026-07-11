@@ -3,15 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from translations import t, bilingual
 
-app.jinja_env.globals['t'] = t
-app.jinja_env.globals['bilingual'] = bilingual
-
-UNIT_TO_CRORE = {"Crore": 1, "Arba": 100, "Kharba": 10000}
-
-def to_crore(value, unit):
-    if value is None:
-        return 0
-    return value * UNIT_TO_CRORE.get(unit, 1)
 app = Flask(__name__)
 
 # Configuration
@@ -21,15 +12,26 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+app.jinja_env.globals['t'] = t
+app.jinja_env.globals['bilingual'] = bilingual
+
+UNIT_TO_CRORE = {"Crore": 1, "Arba": 100, "Kharba": 10000}
+
+def to_crore(value, unit):
+    if value is None:
+        return 0
+    return value * UNIT_TO_CRORE.get(unit, 1)
+
+
 # Custom filter for Nepali number formatting
 @app.template_filter('format_number')
 def format_number(value, unit=True):
     if value is None:
         return "0"
-    
+
     if isinstance(value, str):
         value = float(value)
-    
+
     if value >= 10000000000:   # 100 Kharba
         return f"{value/10000000000:.2f} Kharba"
     elif value >= 100000000:   # 1 Arba
@@ -49,8 +51,7 @@ class User(db.Model):
     full_name = db.Column(db.String(100), nullable=False)
     username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    password= db.Column(db.String(255), nullable=False)
-    some_field_name= db.Column(db.String(255), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), default="user")
 
 
@@ -59,7 +60,7 @@ class BudgetSummary(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fiscal_year = db.Column(db.String(20))
     total_budget = db.Column(db.Float)
-    total_budget_unit = db.Column(db.String(20), default="Crore") 
+    total_budget_unit = db.Column(db.String(20), default="Crore")
     total_growth = db.Column(db.Float)
     capital_budget = db.Column(db.Float)
     capital_percentage = db.Column(db.Float)
@@ -88,6 +89,7 @@ class District(db.Model):
     district_name = db.Column(db.String(100), nullable=False)
     population = db.Column(db.Integer)
     allocation = db.Column(db.Float)
+    percentage = db.Column(db.Float, default=0)
     per_citizen = db.Column(db.Float)
     hdi = db.Column(db.Float)
     status = db.Column(db.String(50))
@@ -107,6 +109,7 @@ class Project(db.Model):
     project_name = db.Column(db.String(200), nullable=False)
     district = db.Column(db.String(100))
     budget = db.Column(db.Float)
+    percentage = db.Column(db.Float, default=0)
     spent = db.Column(db.Float)
     progress = db.Column(db.Integer)
     status = db.Column(db.String(50))
@@ -173,8 +176,8 @@ def home():
         agriculture_per_person_unit="Rs",
         ministries=ministries,
         revenue_sources=revenues,
-        ministry_chart_data=ministry_chart_data,   
-        revenue_chart_data=revenue_chart_data,  
+        ministry_chart_data=ministry_chart_data,
+        revenue_chart_data=revenue_chart_data,
         last_updated="Baisakh 2082"
     )
 
@@ -186,7 +189,17 @@ def ministries():
 
 @app.route("/districts")
 def districts():
-    return render_template("districts.html", districts=District.query.all())
+    summary = BudgetSummary.query.first()
+    total_crore = to_crore(summary.total_budget if summary else 0, summary.total_budget_unit if summary else "Crore")
+
+    district_list = District.query.all()
+    for d in district_list:
+        d.computed_allocation = round(total_crore * (d.percentage or 0) / 100, 2)
+        d.computed_per_citizen = round((d.computed_allocation * 10000000) / d.population, 0) if d.population else 0
+
+    percentage_sum = sum(d.percentage or 0 for d in district_list)
+
+    return render_template("districts.html", districts=district_list, percentage_sum=percentage_sum)
 
 
 @app.route("/revenue")
@@ -196,7 +209,14 @@ def revenue():
 
 @app.route("/projects")
 def projects():
-    return render_template("projects.html", projects=Project.query.all())
+    summary = BudgetSummary.query.first()
+    total_crore = to_crore(summary.total_budget if summary else 0, summary.total_budget_unit if summary else "Crore")
+
+    project_list = Project.query.all()
+    for p in project_list:
+        p.computed_budget = round(total_crore * (p.percentage or 0) / 100, 2)
+
+    return render_template("projects.html", projects=project_list)
 
 
 @app.route("/outcomes")
@@ -309,10 +329,9 @@ def add_district():
         item = District(
             district_name=request.form["district_name"],
             population=int(request.form["population"]),
-            allocation=float(request.form["allocation"]),
-            per_citizen=float(request.form["per_citizen"]),
-            hdi=float(request.form["hdi"]),
-            status=request.form["status"]
+            percentage=float(request.form["percentage"]),
+            hdi=float(request.form["hdi"]) if request.form.get("hdi") else None,
+            status=request.form.get("status", "")
         )
         db.session.add(item)
         db.session.commit()
@@ -328,10 +347,9 @@ def edit_district(id):
     if request.method == "POST":
         item.district_name = request.form["district_name"]
         item.population = int(request.form["population"])
-        item.allocation = float(request.form["allocation"])
-        item.per_citizen = float(request.form["per_citizen"])
-        item.hdi = float(request.form["hdi"])
-        item.status = request.form["status"]
+        item.percentage = float(request.form["percentage"])
+        item.hdi = float(request.form["hdi"]) if request.form.get("hdi") else None
+        item.status = request.form.get("status", "")
         db.session.commit()
         flash("District updated!", "success")
         return redirect(url_for("districts"))
@@ -346,7 +364,7 @@ def add_project():
         item = Project(
             project_name=request.form["project_name"],
             district=request.form["district"],
-            budget=float(request.form["budget"]),
+            percentage=float(request.form["percentage"]),
             spent=float(request.form["spent"]),
             progress=int(request.form["progress"]),
             status=request.form["status"]
@@ -365,7 +383,7 @@ def edit_project(id):
     if request.method == "POST":
         item.project_name = request.form["project_name"]
         item.district = request.form["district"]
-        item.budget = float(request.form["budget"])
+        item.percentage = float(request.form["percentage"])
         item.spent = float(request.form["spent"])
         item.progress = int(request.form["progress"])
         item.status = request.form["status"]
@@ -406,6 +424,8 @@ def edit_outcome(id):
         flash("Outcome updated!", "success")
         return redirect(url_for("outcomes"))
     return render_template("edit_outcome.html", outcome=item)
+
+
 @app.route("/delete-ministry/<int:id>", methods=["GET", "POST"])
 def delete_ministry(id):
     if "user" not in session:
@@ -512,7 +532,7 @@ def edit_summary():
     if request.method == "POST":
         summary.fiscal_year = request.form["fiscal_year"]
         summary.total_budget = float(request.form["total_budget"])
-        summary.total_budget_unit = request.form["total_budget_unit"]   # NEW
+        summary.total_budget_unit = request.form["total_budget_unit"]
         summary.total_growth = float(request.form["total_growth"])
         summary.capital_budget = float(request.form["capital_budget"])
         summary.capital_percentage = float(request.form["capital_percentage"])
@@ -527,6 +547,7 @@ def edit_summary():
         flash("Budget Summary updated successfully!", "success")
         return redirect(url_for("dashboard"))
     return render_template("edit_summary.html", summary=summary)
+
 
 if __name__ == "__main__":
     with app.app_context():
