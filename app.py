@@ -1,7 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from translations import t, bilingual
 
+app.jinja_env.globals['t'] = t
+app.jinja_env.globals['bilingual'] = bilingual
+
+UNIT_TO_CRORE = {"Crore": 1, "Arba": 100, "Kharba": 10000}
+
+def to_crore(value, unit):
+    if value is None:
+        return 0
+    return value * UNIT_TO_CRORE.get(unit, 1)
 app = Flask(__name__)
 
 # Configuration
