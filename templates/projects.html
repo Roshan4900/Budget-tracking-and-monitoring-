@@ -10,7 +10,7 @@
     <div class="navbar">
         <div class="nav-brand">
             <span class="nav-title">सुदूरपश्चिम Budget</span>
-            <span class="nav-sub">Sudurpaschim Province · FY 2081/82</span>
+            <span class="nav-sub">Sudurpaschim Province · FY {{ fiscal_year }}</span>
         </div>
         <div class="nav-links">
             <a class="nav-btn" href="{{ url_for('home') }}">Home</a>
@@ -100,7 +100,7 @@
     </div>
 
     <div class="footer">
-        Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book 2081/82
+        Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book {{ fiscal_year }}
     </div>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>

@@ -11,11 +11,14 @@ const districtsData = [
     // Add more as needed
 ];
 
-const ministriesData = [
-    { name: "Infrastructure", nepali: "भौतिक पूर्वाधार", budget81: 412, budget80: 365, share: 24.8 },
-    { name: "Education", nepali: "शिक्षा", budget81: 318, budget80: 290, share: 19.1 },
-    { name: "Health", nepali: "स्वास्थ्य", budget81: 244, budget80: 210, share: 14.7 },
-    // Add more
+const ministryData = [
+    {% for ministry in ministries %}
+    {
+        name: "{{ ministry.ministry_name }}",
+        current: {{ ministry.budget_current or 0 }},
+        previous: {{ ministry.budget_previous or 0 }}
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
 ];
 
 const projectsData = [

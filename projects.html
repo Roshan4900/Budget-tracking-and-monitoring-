@@ -1,72 +1,463 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ne">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Projects — Sudurpaschim Province Budget Visualizer</title>
-  <meta name="description" content="Province-level infrastructure and development projects: budget, spent, and progress.">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Projects | Sudurpaschim Budget Visualizer</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='styles.css') }}">
 </head>
+
 <body>
 
-  <header class="navbar">
-    <a class="nav-brand" href="index.html">
-      <span class="nav-title">सुदूरपश्चिम Budget</span>
-      <span class="nav-sub">Sudurpaschim Province · FY 2081/82</span>
-    </a>
-    <nav class="nav-links">
-      <a class="nav-btn" href="index.html">Home</a>
-      <a class="nav-btn" href="ministries.html">Ministries</a>
-      <a class="nav-btn" href="districts.html">Districts</a>
-      <a class="nav-btn" href="revenue.html">Revenue</a>
-      <a class="nav-btn active" href="projects.html">Projects</a>
-      <a class="nav-btn" href="outcomes.html">Outcomes</a>
-    </nav>
-  </header>
+<!-- ================= NAVBAR ================= -->
 
-  <main class="container">
-    <div class="page-header">
-      <h1>Capital projects tracker</h1>
-      <p>Province-level infrastructure and development projects — budget, spent, and progress</p>
+<div class="navbar">
+
+    <div class="nav-brand">
+
+        <span class="nav-title">
+            सुदूरपश्चिम Budget
+        </span>
+
+        <span class="nav-sub">
+            Sudurpaschim Province · FY {{ current_fiscal_year }}
+        </span>
+
     </div>
 
-    <div class="metrics">
-      <div class="metric"><div class="metric-label">Total projects</div><div class="metric-value">8</div><div class="metric-sub" style="color:var(--color-text-tertiary)">tracked this year</div></div>
-      <div class="metric"><div class="metric-label">On track</div><div class="metric-value" style="color:#2e7d32">3</div><div class="metric-sub up">progressing well</div></div>
-      <div class="metric"><div class="metric-label">Delayed</div><div class="metric-value" style="color:#e65100">3</div><div class="metric-sub down">behind schedule</div></div>
-      <div class="metric"><div class="metric-label">Completed</div><div class="metric-value" style="color:#1565c0">2</div><div class="metric-sub" style="color:var(--color-text-tertiary)">this fiscal year</div></div>
+
+    <div class="nav-links">
+
+        <a class="nav-btn"
+           href="{{ url_for('home') }}">
+            Home
+        </a>
+
+        <a class="nav-btn"
+           href="{{ url_for('ministries') }}">
+            Ministries
+        </a>
+
+        <a class="nav-btn"
+           href="{{ url_for('districts') }}">
+            Districts
+        </a>
+
+        <a class="nav-btn"
+           href="{{ url_for('revenue') }}">
+            Revenue
+        </a>
+
+        <a class="nav-btn active"
+           href="{{ url_for('projects') }}">
+            Projects
+        </a>
+
+        <a class="nav-btn"
+           href="{{ url_for('outcomes') }}">
+            Outcomes
+        </a>
+
+
+        {% if session.get("user") %}
+
+        <a class="nav-btn"
+           href="{{ url_for('dashboard') }}">
+            Admin Dashboard
+        </a>
+
+        <a class="nav-btn"
+           href="{{ url_for('logout') }}">
+            Logout
+        </a>
+
+        {% else %}
+
+        <a class="nav-btn"
+           href="{{ url_for('login') }}">
+            Admin Login
+        </a>
+
+        {% endif %}
+
     </div>
 
-    <div class="card">
-      <div class="card-title">All capital projects</div>
-      <div style="overflow-x:auto">
-        <table>
-          <thead><tr><th>Project</th><th>District</th><th>Budget</th><th>Spent</th><th>Progress</th><th>Status</th></tr></thead>
-          <tbody id="projects-tbody"></tbody>
-        </table>
-      </div>
-      <p style="font-size:11px;color:var(--color-text-tertiary);margin-top:10px">Tip: tap any district name to see its full budget allocation.</p>
-      <div class="card-links">
-        <a class="card-link" href="revenue.html">Funded from the capital budget — see revenue sources →</a>
-        <a class="card-link" href="districts.html">See allocation for every district →</a>
-        <a class="card-link" href="ministries.html">Mostly Infrastructure ministry spending →</a>
-      </div>
+</div>
+
+
+<!-- ================= MAIN CONTENT ================= -->
+
+<div class="container">
+
+    <div class="page active" id="page-projects">
+
+        <div class="page-header">
+
+            <h2>
+                Capital projects
+            </h2>
+
+            <p>
+                Tracking major development projects across Sudurpaschim Province ·
+                FY {{ current_fiscal_year }}
+            </p>
+
+        </div>
+
+
+        <!-- ADMIN BUTTON -->
+
+        {% if session.get('role') == 'admin' %}
+
+        <div style="margin-bottom:20px;">
+
+            <a href="{{ url_for('add_project') }}"
+               class="nav-btn"
+               style="background:#1a3c5e;color:white;">
+
+                + Add New Project
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================= METRICS ================= -->
+
+        <div class="metrics">
+
+            <div class="metric">
+
+                <div class="metric-label">
+                    Total projects
+                </div>
+
+                <div class="metric-value">
+                    8
+                </div>
+
+                <div class="metric-sub"
+                     style="color:var(--color-text-tertiary)">
+
+                    tracked this year
+
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="metric-label">
+                    On track
+                </div>
+
+                <div class="metric-value"
+                     style="color:#2e7d32">
+
+                    3
+
+                </div>
+
+                <div class="metric-sub up">
+                    progressing well
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="metric-label">
+                    Delayed
+                </div>
+
+                <div class="metric-value"
+                     style="color:#e65100">
+
+                    3
+
+                </div>
+
+                <div class="metric-sub down">
+                    behind schedule
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="metric-label">
+                    Completed
+                </div>
+
+                <div class="metric-value"
+                     style="color:#1565c0">
+
+                    2
+
+                </div>
+
+                <div class="metric-sub"
+                     style="color:var(--color-text-tertiary)">
+
+                    this fiscal year
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= PROJECT TABLE ================= -->
+
+        <div class="card">
+
+            <div class="card-title">
+                All capital projects — FY {{ current_fiscal_year }}
+            </div>
+
+
+            <div style="overflow-x:auto">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Project
+                            </th>
+
+                            <th>
+                                District
+                            </th>
+
+                            <th>
+                                Budget
+                            </th>
+
+                            <th>
+                                Spent
+                            </th>
+
+                            <th>
+                                Progress
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            {% if session.get('role') == 'admin' %}
+
+                            <th>
+                                Action
+                            </th>
+
+                            {% endif %}
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="projects-tbody">
+
+                        {% if projects %}
+
+                            {% for project in projects %}
+
+                            <tr>
+
+                                <td style="font-weight:500">
+                                    {{ project.project_name }}
+                                </td>
+
+
+                                <td>
+                                    {{ project.district }}
+                                </td>
+
+
+                                <td>
+                                    Rs {{ project.budget }} Cr
+                                </td>
+
+
+                                <td>
+                                    Rs {{ project.spent }} Cr
+                                </td>
+
+
+                                <td>
+                                    {{ project.progress }}%
+                                </td>
+
+
+                                <td>
+
+                                    {% if project.status == 'completed' %}
+
+                                    <span class="badge b-completed">
+                                        Completed
+                                    </span>
+
+                                    {% elif project.status == 'delayed' %}
+
+                                    <span class="badge b-delayed">
+                                        Delayed
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge b-ongoing">
+                                        Ongoing
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                {% if session.get('role') == 'admin' %}
+
+                                <td>
+
+                                    <a href="{{ url_for('edit_project', id=project.id) }}"
+                                       class="nav-btn"
+                                       style="padding:6px 12px;font-size:12px;">
+
+                                        Edit
+
+                                    </a>
+
+
+                                    <a href="{{ url_for('delete_project', id=project.id) }}"
+                                       onclick="return confirm('Are you sure you want to delete this project?');"
+                                       style="
+                                       display:inline-block;
+                                       background:white;
+                                       color:#c62828;
+                                       padding:6px 14px;
+                                       border:1px solid #c62828;
+                                       border-radius:6px;
+                                       text-decoration:none;
+                                       font-size:13px;
+                                       margin-left:6px;
+                                       ">
+
+                                        Delete
+
+                                    </a>
+
+                                </td>
+
+                                {% endif %}
+
+                            </tr>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+
+                                <td colspan="7"
+                                    style="
+                                    text-align:center;
+                                    padding:25px;
+                                    color:var(--color-text-tertiary);
+                                    ">
+
+                                    No projects found in the database.
+
+                                </td>
+
+                            </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <p style="
+                font-size:11px;
+                color:var(--color-text-tertiary);
+                margin-top:10px;
+                ">
+
+                Tip: tap any district name to see its full budget allocation.
+
+            </p>
+
+
+            <!-- ================= LINKS ================= -->
+
+            <div class="card-links">
+
+                <a class="card-link"
+                   href="{{ url_for('revenue') }}">
+
+                    Funded from the capital budget — see revenue sources →
+
+                </a>
+
+
+                <a class="card-link"
+                   href="{{ url_for('districts') }}">
+
+                    See allocation for every district →
+
+                </a>
+
+
+                <a class="card-link"
+                   href="{{ url_for('ministries') }}">
+
+                    Mostly Infrastructure ministry spending →
+
+                </a>
+
+            </div>
+
+        </div>
+
     </div>
-  </main>
 
-  <footer class="footer">
-    <nav class="footer-nav">
-      <a href="index.html">Home</a>
-      <a href="ministries.html">Ministries</a>
-      <a href="districts.html">Districts</a>
-      <a href="revenue.html">Revenue</a>
-      <a href="projects.html">Projects</a>
-      <a href="outcomes.html">Outcomes</a>
-    </nav>
-    Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book 2081/82 · CBS Nepal · Last updated: Baisakh 2082
-  </footer>
+</div>
 
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+
+<!-- ================= FOOTER ================= -->
+
+<div class="footer">
+
+    Data source: Sudurpaschim Province Finance Ministry ·
+    Budget Speech &amp; Red Book {{ current_fiscal_year }} ·
+    CBS Nepal
+
+</div>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script src="{{ url_for('static', filename='data.js') }}"></script>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+
+
 </body>
 </html>

@@ -12,7 +12,7 @@
   <div class="navbar">
     <div class="nav-brand">
       <span class="nav-title">सुदूरपश्चिम Budget</span>
-      <span class="nav-sub">Sudurpaschim Province · FY {{ fiscal_year|default('2081/82') }}</span>
+      <span class="nav-sub">Sudurpaschim Province · FY {{ fiscal_year }}</span>
     </div>
     <div class="nav-links">
       <a class="nav-btn active" href="{{ url_for('home') }}">Home</a>
@@ -83,23 +83,23 @@
         <div class="you-grid">
           <div class="you-item">
             <div class="you-val">Rs {{ per_citizen_spending|default(6127) | format_number(unit=False) }}</div>
-            <div class="you-label">Per person spending</div>
+            <div class="you-label">{{ (population_thousands / 1000) | round(2) }} lakh population</div>
           </div>
           <div class="you-item">
             <div class="you-val">Rs {{ education_per_person|default(1371) | format_number(unit=False) }}</div>
-            <div class="you-label">On your education</div>
+            <div class="you-label">{{ (population_thousands / 1000) | round(2) }} lakh population</div>
           </div>
           <div class="you-item">
             <div class="you-val">Rs {{ health_per_person|default(1052) | format_number(unit=False) }}</div>
-            <div class="you-label">On your health</div>
+            <div class="you-label">{{ (population_thousands / 1000) | round(2) }} lakh population</div>
           </div>
           <div class="you-item">
             <div class="you-val">Rs {{ roads_per_person|default(1775) | format_number(unit=False) }}</div>
-            <div class="you-label">On roads near you</div>
+            <div class="you-label">{{ (population_thousands / 1000) | round(2) }} lakh population</div>
           </div>
           <div class="you-item">
             <div class="you-val">Rs {{ agriculture_per_person|default(801) | format_number(unit=False) }}</div>
-            <div class="you-label">On farming support</div>
+            <div class="you-label">{{ (population_thousands / 1000) | round(2) }} lakh population</div>
           </div>
         </div>
       </div>
@@ -107,7 +107,7 @@
   </div>
 
   <footer class="footer">
-    Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book {{ fiscal_year|default('2081/82') }} · CBS Nepal · Last updated: Baisakh 2082
+    Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book {{ fiscal_year }} · CBS Nepal · Last updated: Baisakh 2082
   </footer>
 
   <!-- Scripts -->

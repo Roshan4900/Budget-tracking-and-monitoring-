@@ -55,7 +55,7 @@
     <div class="navbar">
         <div class="nav-brand">
             <span class="nav-title">सुदूरपश्चिम Budget</span>
-            <span class="nav-sub">Administrator Panel · FY 2081/82</span>
+            <span class="nav-sub">Administrator Panel · FY {{ fiscal_year }}</span>
         </div>
         <div class="nav-links">
             <a class="nav-btn" href="{{ url_for('home') }}">View Public Website</a>
@@ -112,11 +112,16 @@
                 </div>
 
                 <div class="dashboard-card">
-                    <h2>📈 Homepage Summary</h2>
-                    <p>Update total budget, key metrics shown on public homepage.</p>
-                    <br>
-                    <a class="nav-btn" href="{{ url_for('edit_summary') }}">Edit Budget Summary</a>
-                </div>
+    <h2>📈 Homepage Summary</h2>
+    <p>Update total budget, key metrics shown on public homepage.</p>
+    <br>
+    <a class="nav-btn" href="{{ url_for('edit_summary') }}">Edit Budget Summary</a>
+    <form method="POST" action="{{ url_for('rollover_fiscal_year') }}" onsubmit="return confirm('This freezes the current figures as last year\'s data. Continue?');" style="display:inline;">
+        <button type="submit" style="background:#e65100; color:white; padding:10px 18px; border:none; border-radius:6px; font-size:13px; cursor:pointer; margin-bottom:10px;">
+            Roll Over to New Fiscal Year
+        </button>
+    </form>
+</div>
             </div>
         </div>
     </div>
