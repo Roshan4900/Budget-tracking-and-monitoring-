@@ -630,18 +630,19 @@ def add_project():
         item = Project(
             project_name=request.form["project_name"],
             district=request.form["district"],
-            percentage=float(request.form["percentage"]),
+            budget=float(request.form["budget"]),
             spent=float(request.form["spent"]),
             progress=int(request.form["progress"]),
             status=request.form["status"]
         )
+
         db.session.add(item)
         db.session.commit()
+
         flash("Project added successfully!", "success")
         return redirect(url_for("projects"))
+
     return render_template("add_project.html")
-
-
 @app.route("/edit-project/<int:id>", methods=["GET", "POST"])
 @admin_required
 def edit_project(id):

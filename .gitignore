@@ -1,3 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+env/
+venv/
+
+# Secrets
+.env
+*.env
+*.pem
+*.key
+
+# Flask
+instance/
+*.log
+
+# Database
+*.sql
+*.sqlite
+*.db
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
 env/
 __pycache__/
 *.pyc

@@ -3,108 +3,491 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Projects | Sudurpaschim Budget Visualizer</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='styles.css') }}">
 </head>
+
 <body>
+
+    <!-- ================= NAVBAR ================= -->
+
     <div class="navbar">
+
         <div class="nav-brand">
-            <span class="nav-title">सुदूरपश्चिम Budget</span>
-            <span class="nav-sub">Sudurpaschim Province · FY {{ fiscal_year }}</span>
+
+            <span class="nav-title">
+                सुदूरपश्चिम Budget
+            </span>
+
+            <span class="nav-sub">
+                Sudurpaschim Province · FY {{ fiscal_year }}
+            </span>
+
         </div>
+
+
         <div class="nav-links">
-            <a class="nav-btn" href="{{ url_for('home') }}">Home</a>
-            <a class="nav-btn" href="{{ url_for('ministries') }}">Ministries</a>
-            <a class="nav-btn" href="{{ url_for('districts') }}">Districts</a>
-            <a class="nav-btn" href="{{ url_for('revenue') }}">Revenue</a>
-            <a class="nav-btn active" href="{{ url_for('projects') }}">Projects</a>
-            <a class="nav-btn" href="{{ url_for('outcomes') }}">Outcomes</a>
-            {% if session.get("user") %}
-                <a class="nav-btn" href="{{ url_for('dashboard') }}">Admin Dashboard</a>
-                <a class="nav-btn" href="{{ url_for('logout') }}">Logout</a>
+
+            <a class="nav-btn"
+               href="{{ url_for('home') }}">
+                Home
+            </a>
+
+            <a class="nav-btn"
+               href="{{ url_for('ministries') }}">
+                Ministries
+            </a>
+
+            <a class="nav-btn"
+               href="{{ url_for('districts') }}">
+                Districts
+            </a>
+
+            <a class="nav-btn"
+               href="{{ url_for('revenue') }}">
+                Revenue
+            </a>
+
+            <a class="nav-btn active"
+               href="{{ url_for('projects') }}">
+                Projects
+            </a>
+
+            <a class="nav-btn"
+               href="{{ url_for('outcomes') }}">
+                Outcomes
+            </a>
+
+
+            <!-- ================= ADMIN LOGIN ================= -->
+
+            {% if session.get('user') %}
+
+                <a class="nav-btn"
+                   href="{{ url_for('dashboard') }}">
+                    Admin Dashboard
+                </a>
+
+                <a class="nav-btn"
+                   href="{{ url_for('logout') }}">
+                    Logout
+                </a>
+
             {% else %}
-                <a class="nav-btn" href="{{ url_for('login') }}">Admin Login</a>
+
+                <a class="nav-btn"
+                   href="{{ url_for('login') }}">
+                    Admin Login
+                </a>
+
             {% endif %}
+
         </div>
+
     </div>
+
+
+    <!-- ================= MAIN CONTAINER ================= -->
 
     <div class="container">
-        <div class="page active" id="page-projects">
+
+        <div class="page active"
+             id="page-projects">
+
+
+            <!-- ================= PAGE HEADER ================= -->
+
             <div class="page-header">
-                <h2>Capital projects tracker</h2>
-                <p>Province-level infrastructure and development projects — budget, spent, and progress</p>
+
+                <h2>
+                    Capital projects tracker
+                </h2>
+
+                <p>
+                    Province-level infrastructure and development
+                    projects — budget, spent, and progress
+                </p>
+
             </div>
 
-            <!-- Metrics -->
+
+            <!-- ================= METRICS ================= -->
+
             <div class="metrics">
-                <div class="metric"><div class="metric-label">Total projects</div><div class="metric-value">8</div><div class="metric-sub" style="color:var(--color-text-tertiary)">tracked this year</div></div>
-                <div class="metric"><div class="metric-label">On track</div><div class="metric-value" style="color:#2e7d32">3</div><div class="metric-sub up">progressing well</div></div>
-                <div class="metric"><div class="metric-label">Delayed</div><div class="metric-value" style="color:#e65100">3</div><div class="metric-sub down">behind schedule</div></div>
-                <div class="metric"><div class="metric-value" style="color:#1565c0">2</div><div class="metric-sub" style="color:var(--color-text-tertiary)">this fiscal year</div></div>
+
+                <div class="metric">
+
+                    <div class="metric-label">
+                        Total projects
+                    </div>
+
+                    <div class="metric-value">
+                        {{ projects|length }}
+                    </div>
+
+                    <div class="metric-sub"
+                         style="color:var(--color-text-tertiary)">
+                        tracked this year
+                    </div>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <div class="metric-label">
+                        On track
+                    </div>
+
+                    <div class="metric-value"
+                         style="color:#2e7d32">
+
+                        {{ projects|selectattr('status', 'equalto', 'On Track')|list|length }}
+
+                    </div>
+
+                    <div class="metric-sub up">
+                        progressing well
+                    </div>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <div class="metric-label">
+                        Delayed
+                    </div>
+
+                    <div class="metric-value"
+                         style="color:#e65100">
+
+                        {{ projects|selectattr('status', 'equalto', 'Delayed')|list|length }}
+
+                    </div>
+
+                    <div class="metric-sub down">
+                        behind schedule
+                    </div>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <div class="metric-label">
+                        Completed
+                    </div>
+
+                    <div class="metric-value"
+                         style="color:#1565c0">
+
+                        {{ projects|selectattr('status', 'equalto', 'Completed')|list|length }}
+
+                    </div>
+
+                    <div class="metric-sub"
+                         style="color:var(--color-text-tertiary)">
+                        this fiscal year
+                    </div>
+
+                </div>
+
             </div>
+
+
+            <!-- ================================================= -->
+            <!-- ADMIN ONLY: ADD PROJECT BUTTON -->
+            <!-- ================================================= -->
 
             {% if session.get('role') == 'admin' %}
-            <div style="margin-bottom: 20px;">
-                <a href="{{ url_for('add_project') }}" class="nav-btn" style="background:#1a3c5e;color:white;">+ Add New Project</a>
+
+            <div style="margin-bottom:20px;">
+
+                <a href="{{ url_for('add_project') }}"
+                   class="nav-btn"
+                   style="
+                       background:#1a3c5e;
+                       color:white;
+                       display:inline-block;
+                       padding:10px 18px;
+                       border-radius:6px;
+                       text-decoration:none;
+                   ">
+
+                    + Add New Project
+
+                </a>
+
             </div>
+
             {% endif %}
 
+
+            <!-- ================= PROJECT TABLE ================= -->
+
             <div class="card">
-                <div class="card-title">All capital projects</div>
-                <div style="overflow-x:auto">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Project</th>
-                                <th>District</th>
-                                <th>Budget</th>
-                                <th>Spent</th>
-                                <th>Progress</th>
-                                <th>Status</th>
-                                {% if session.get('role') == 'admin' %}
-                                <th>Action</th>
-                                {% endif %}
-                            </tr>
-                        </thead>
-                        <tbody id="projects-tbody">
-                            {% for p in projects %}
-                            <tr>
-                                <td style="font-weight:500;max-width:280px">{{ p.project_name }}</td>
-                                <td style="color:var(--color-text-secondary);font-size:12px">{{ p.district }}</td>
-                                <td>Rs {{ p.budget }} Cr</td>
-                                <td>Rs {{ p.spent }} Cr</td>
-                                <td>
-                                    <div style="display:flex;align-items:center;gap:7px">
-                                        <div class="prog-track">
-                                            <div class="prog-fill" style="width:{{ p.progress }}%;background:{{ '#2e7d32' if p.status=='Completed' else '#e65100' if p.status=='Delayed' else '#1565c0' }}"></div>
-                                        </div>
-                                        <span style="font-size:11px;color:var(--color-text-tertiary);white-space:nowrap">{{ p.progress }}%</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="badge b-{{ p.status|lower }}">{{ p.status }}</span>
-                                </td>
-                                {% if session.get('role') == 'admin' %}
-                                <td>
-                                    <a href="{{ url_for('edit_project', id=p.id) }}" class="nav-btn" style="padding:6px 12px;font-size:12px;">Edit</a>
-                                    <a href="{{ url_for('delete_project', id=p.id) }}" style="display:inline-block; background:white; color:#c62828; padding:6px 14px; border:1px solid #c62828; border-radius:6px; text-decoration:none; font-size:13px; margin-left:6px;">Delete</a>
-                                </td>
-                                {% endif %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+
+                <div class="card-title">
+                    All capital projects
                 </div>
+
+
+                <div style="overflow-x:auto">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Project
+                                </th>
+
+                                <th>
+                                    District
+                                </th>
+
+                                <th>
+                                    Budget
+                                </th>
+
+                                <th>
+                                    Spent
+                                </th>
+
+                                <th>
+                                    Progress
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+
+                                <!-- ADMIN ONLY -->
+
+                                {% if session.get('role') == 'admin' %}
+
+                                <th>
+                                    Action
+                                </th>
+
+                                {% endif %}
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="projects-tbody">
+
+
+                            {% for p in projects %}
+
+                            <tr>
+
+                                <!-- PROJECT NAME -->
+
+                                <td style="
+                                    font-weight:500;
+                                    max-width:280px;
+                                ">
+
+                                    {{ p.project_name }}
+
+                                </td>
+
+
+                                <!-- DISTRICT -->
+
+                                <td style="
+                                    color:var(--color-text-secondary);
+                                    font-size:12px;
+                                ">
+
+                                    {{ p.district }}
+
+                                </td>
+
+
+                                <!-- BUDGET -->
+
+                                <td>
+
+                                    Rs {{ p.budget }} Cr
+
+                                </td>
+
+
+                                <!-- SPENT -->
+
+                                <td>
+
+                                    Rs {{ p.spent }} Cr
+
+                                </td>
+
+
+                                <!-- PROGRESS -->
+
+                                <td>
+
+                                    <div style="
+                                        display:flex;
+                                        align-items:center;
+                                        gap:7px;
+                                    ">
+
+                                        <div class="prog-track">
+
+                                            <div class="prog-fill"
+                                                 style="
+                                                     width:{{ p.progress }}%;
+                                                     background:
+                                                     {{ '#2e7d32'
+                                                        if p.status == 'Completed'
+                                                        else '#e65100'
+                                                        if p.status == 'Delayed'
+                                                        else '#1565c0' }};
+                                                 ">
+                                            </div>
+
+                                        </div>
+
+
+                                        <span style="
+                                            font-size:11px;
+                                            color:var(--color-text-tertiary);
+                                            white-space:nowrap;
+                                        ">
+
+                                            {{ p.progress }}%
+
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    <span class="badge b-{{ p.status|lower }}">
+
+                                        {{ p.status }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- ================================================= -->
+                                <!-- ADMIN ONLY: EDIT + DELETE -->
+                                <!-- ================================================= -->
+
+                                {% if session.get('role') == 'admin' %}
+
+                                <td>
+
+                                    <a href="{{ url_for('edit_project', id=p.id) }}"
+                                       class="nav-btn"
+                                       style="
+                                           padding:6px 12px;
+                                           font-size:12px;
+                                       ">
+
+                                        Edit
+
+                                    </a>
+
+
+                                    <a href="{{ url_for('delete_project', id=p.id) }}"
+                                       onclick="return confirm('Are you sure you want to delete this project?');"
+                                       style="
+                                           display:inline-block;
+                                           background:white;
+                                           color:#c62828;
+                                           padding:6px 14px;
+                                           border:1px solid #c62828;
+                                           border-radius:6px;
+                                           text-decoration:none;
+                                           font-size:13px;
+                                           margin-left:6px;
+                                       ">
+
+                                        Delete
+
+                                    </a>
+
+                                </td>
+
+                                {% endif %}
+
+
+                            </tr>
+
+                            {% else %}
+
+                            <!-- NO PROJECTS -->
+
+                            <tr>
+
+                                <td colspan="7"
+                                    style="
+                                        text-align:center;
+                                        padding:30px;
+                                        color:var(--color-text-tertiary);
+                                    ">
+
+                                    No projects available.
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
             </div>
+
         </div>
+
     </div>
+
+
+    <!-- ================= FOOTER ================= -->
 
     <div class="footer">
-        Data source: Sudurpaschim Province Finance Ministry · Budget Speech &amp; Red Book {{ fiscal_year }}
+
+        Data source:
+        Sudurpaschim Province Finance Ministry ·
+        Budget Speech &amp; Red Book
+        {{ fiscal_year }}
+
     </div>
 
+
+    <!-- ================= JAVASCRIPT ================= -->
+
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
     <script src="{{ url_for('static', filename='data.js') }}"></script>
+
     <script src="{{ url_for('static', filename='app.js') }}"></script>
+
 </body>
+
 </html>

@@ -55,7 +55,7 @@
     <div class="navbar">
         <div class="nav-brand">
             <span class="nav-title">सुदूरपश्चिम Budget</span>
-            <span class="nav-sub">Administrator Panel · FY {{ fiscal_year }}</span>
+            <span class="nav-sub">Administrator Panel · FY </span>
         </div>
         <div class="nav-links">
             <a class="nav-btn" href="{{ url_for('home') }}">View Public Website</a>
@@ -78,6 +78,23 @@
                     <a class="nav-btn" href="{{ url_for('ministries') }}">View All Ministries</a>
                     <a class="nav-btn" href="{{ url_for('add_ministry') }}">+ Add New Ministry</a>
                 </div>
+            <div class="dashboard-card">
+    <h2>🚧 Capital Projects</h2>
+    <p>Track progress of all development projects.</p>
+    <br>
+
+
+<a class="nav-btn" href="{{ url_for('projects') }}">
+    View All Projects
+</a>
+
+<a class="nav-btn" href="{{ url_for('add_project') }}">
+    + Add New Project
+</a>
+
+
+</div>
+
 
                 <div class="dashboard-card">
                     <h2>📍 Districts</h2>
